@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+
+  <param name="use_sim_time" value="true" />
+  <param name="world_lat" value="10.77549" /> <!--toa do gps-->
+  <param name="world_lon" value="106.65978" />
+
+  <node pkg="gazebo_ros" type="gzserver"
+        name="gazebo" output="screen"
+        args="-e ode $(find simulation)/world/workspace_simulation.world" /> <!-- load map world --> 
+   <node pkg="gazebo_ros" type="gzclient"
+        name="gazebo_gui" /> 
+   <remap from="odom" to="odom_1"/>
+
+   <node pkg="switch_mode_indoor" type="switch_mode_indoor" name="switch_mode_indoor" /> 
+   <!-- <node pkg="scan_qrcode" type="AdvancedQRBar.py" name="scan_qrcode" />  -->
+   <!-- <node pkg="test_detect_obstacle" type="test_detect_obstacle" name="test_detect_obstacle" output="screen"/>  -->
+   <node pkg="send_goal_indoor" type="send_goal_indoor" name="send_goal_indoor" output="screen"/> 
+
+  <group ns="/">
+    <param name="ned_lat" value="10.77549" />
+    <param name="ned_lon" value="106.65978" />
+
+    <include file="$(find simulation)/launch/upload_agv.launch">
+
+ <arg name="init_x" default="0.0" />
+  <arg name="init_y" default="0.0" />
+  <arg name="init_z" default="0.0" />
+      <!-- <arg name="url" default="udp://localhost:14551@localhost:14550" /> -->
+      <arg name="url" default="udp://100.96.1.34:14551@100.96.1.18:14550" />
+      <arg name="sysid" default="1" />
+      <arg name="model_name" default="/" />
+    </include>
+  </group>
+</launch>

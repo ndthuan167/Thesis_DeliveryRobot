@@ -1,0 +1,35 @@
+<launch>
+  <param name="robot_description"
+    textfile="$(find cartographer_ros)/urdf/backpack_2d.urdf" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find cartographer_ros)/configuration_files
+          -configuration_basename backpack_2d.lua"
+      output="screen">
+    <remap from="scan" to="horizontal_laser_2d" />
+  </node>
+
+<node  pkg="map_server" type="map_server" name="map_server"  args="/home/viamlab/Delivery_Robot/Map/map_full.yaml"/>
+
+
+
+<include file="/home/viamlab/Delivery_Robot/deli_ws/launch/amcl.launch"/>
+
+
+<node pkg="move_base" type="move_base" name="move_base" respawn="true"  output="screen">
+
+	 <rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+    	<rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+  	<rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/local_costmap_params.yaml" command="load" /> 
+	<rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/global_costmap_params.yaml" command="load" />
+	<rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/move_base_params.yaml" command="load" />
+	<rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/teb_local_planner_params.yaml" command="load"  />  
+ 	<rosparam file="/home/viamlab/Delivery_Robot/deli_ws/src/params/base_local_planner_params.yaml" command="load"/> 
+	</node>
+  <node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="-d $(find cartographer_ros)/configuration_files/navi.rviz" /> 
+</launch>

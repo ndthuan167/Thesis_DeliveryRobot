@@ -1,0 +1,1 @@
+string string_of_qrcode

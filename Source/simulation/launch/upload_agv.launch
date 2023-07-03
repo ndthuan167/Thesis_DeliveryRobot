@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="enable_gcs_transceiver" default="true" />
+  <arg name="enable_guider" default="true" />
+  <arg name="enable_controller" default="true" />
+
+ <!--<arg name="init_x" default="254.075743" />
+  <arg name="init_y" default="4.870113" />
+  <arg name="init_z" default="0.049996" />
+  <arg name="init_R" default="0.0" />
+  <arg name="init_P" default="0.0" />
+  <arg name="init_Y" default="1.61705" />-->
+
+  <arg name="init_x" default="0.0" />
+  <arg name="init_y" default="0.0" />
+  <arg name="init_z" default="0.0" />
+  <arg name="init_R" default="0.0" />
+  <arg name="init_P" default="0.0" />
+  <arg name="init_Y" default="-5.20" />
+
+  <arg name="model_name" default="/" /> 
+
+  <arg name="url" default="udp://localhost:14551@localhost:14550" />
+  <arg name="sysid" default="1" />
+
+  <param name="robot_description"
+         command="$(find xacro)/xacro '$(find simulation)/urdf/model_new_plugins.xacro'"/>
+  <param name="wheel_radius" value="0.1" />
+
+  <node pkg="simulation" type="model_spawner.py"
+        name="model_spawner" output="screen"
+        args="-x $(arg init_x) -y $(arg init_y) -z $(arg init_z)
+              -R $(arg init_R) -P $(arg init_P) -Y $(arg init_Y)
+              -param robot_description -urdf -model $(arg model_name)" />
+
+
+
+  <group if="$(arg enable_gcs_transceiver)">
+    <node pkg="gcs_transceiver" type="gcs_transceiver" 
+          name="gcs_transceiver" >
+      <param name="main_period" value="1.0" />
+      <param name="main_url" value="$(arg url)" />
+      <param name="autopilot_sysid" value="$(arg sysid)" />
+      <param name="gcs_sysid" value="255" />
+    </node>
+  </group>
+
+  <group if="$(arg enable_guider)">
+    <node pkg="guider" type="guider" 
+          name="guider" output="screen" >
+      <param name="guiding_period" value="0.1" />
+      <param name="set_speed" value="0.7" />
+      <param name="set_heading" value="0.71" />
+      <param name="LOS_radius" value="3.0" />
+      <param name="LOS_min_delta" value="1.0" />
+      <param name="LOS_max_delta" value="2.0" />
+      <param name="LOS_beta" value="0.0" />
+    </node>
+  </group>
+
+  <group if="$(arg enable_controller)">
+    <node pkg="controller" type="controller" 
+          name="controller" output="screen" >
+      <param name="controlling_period" value="0.02" />
+      <param name="diff_rpm" value="100.0" />
+      <param name="heading_Kp" value="30.0" />
+      <param name="heading_Ki" value="0.0" />
+      <param name="heading_Kd" value="0.3" />
+    </node>
+  </group>
+</launch>

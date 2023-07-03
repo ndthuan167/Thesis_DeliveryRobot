@@ -1,0 +1,4 @@
+<launch>
+    <arg name="map_file" default="/home/ndthuan/Downloads/map2/map2.yaml"/>    
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" respawn="true" />
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+
+    <include file ="/home/ndthuan/agv_ws/src/simulation/launch/simulation.launch"/>
+    
+
+    
+  <!-- <node name="rviz" pkg="rviz" type="rviz" required="true"
+  args="-d $(find cartographer_ros)/configuration_files/navi.rviz" />  -->
+</launch> 

@@ -1,0 +1,3 @@
+uint8 mode_indoor
+bool set_complete_indoor
+float64 abc

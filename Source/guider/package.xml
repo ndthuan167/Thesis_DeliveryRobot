@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>guider</name>
+  <version>0.0.0</version>
+  <description>The guider package</description>
+  <maintainer email="legopro@todo.todo">legopro</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+
+  <depend>std_msgs</depend>
+  <depend>utils</depend>
+</package>

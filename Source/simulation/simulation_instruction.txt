@@ -1,0 +1,11 @@
+# Install extra packages for simulation
+sudo apt install ros-melodic-gazebo-ros-pkgs
+
+# View 3D model
+roslaunch description view_model.launch
+
+# Run AGV in guidance mode
+roslaunch simulation start_guidance.launch
+
+# Manually control AGV
+rosrun simulation motor_commander.py __ns:=/
